@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        async function calculateOutcome() {
+            const investment = document.getElementById("investment").value.replace('$', '').replace(',', '');
+            const buyPrice = document.getElementById("buyPrice").value.replace('$', '');
+            const sellPrice = document.getElementById("sellPrice").value.replace('$', '');
+            const investmentFee = document.getElementById("investmentFee").value.replace('$', '');
+            const exitFee = document.getElementById("exitFee").value.replace('$', '');
+
+            const response = await fetch('http://localhost:3000/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    investment: investment,
+                    buyPrice: buyPrice,
+                    sellPrice: sellPrice,
+                    investmentFee: investmentFee,
+                    exitFee: exitFee
+                }),
+            });
+
+            const data = await response.json();
+           
+            document.getElementById("profitLoss").innerText = `$${data.profitLoss} (${data.profitLossPercentage}%)`;
+            document.getElementById("totalInvestment").innerText = `$${data.totalInvestment}`;
+            document.getElementById("totalTakeHome").innerText = `$${data.totalTakeHome}`;
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div class="flex justify-between items-center">
+            <div>
+                <label class="block font-semibold mb-2">Choose a currency</label>
+                <select class="border border-gray-300 p-2 rounded">
+                    <option>USD</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2">Choose cryptocurrency</label>
+                <div class="flex space-x-3">
+                    <button class="border border-gray-300 p-2 rounded">BTC</button>
+                    <button class="border border-gray-300 p-2 rounded">ETH</button>
+                    <button class="border border-gray-300 p-2 rounded">BNB</button>
+                    <button class="border border-gray-300 p-2 rounded">DOGE</button>
+                    <button class="border border-gray-300 p-2 rounded">XRP</button>
+                    <button class="border border-gray-300 p-2 rounded">Other</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">Investment</label>
+                    <input type="text" id="investment" value="$0" class="border border-gray-300 p-2 rounded w-full" oninput="calculateOutcome()">
+                </div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">Buy Price</label>
+                    <input type="text" id="buyPrice" value="$0" class="border border-gray-300 p-2 rounded w-full" oninput="calculateOutcome()">
+                </div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">Sell Price</label>
+                    <input type="text" id="sellPrice" value="$0" class="border border-gray-300 p-2 rounded w-full" oninput="calculateOutcome()">
+                </div>
+            </div>
+
+            <div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">Investment Fee</label>
+                    <input type="text" id="investmentFee" value="$0" class="border border-gray-300 p-2 rounded w-full" oninput="calculateOutcome()">
+                </div>
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2">Exit Fee</label>
+                    <input type="text" id="exitFee" value="$0" class="border border-gray-300 p-2 rounded w-full" oninput="calculateOutcome()">
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 p-6 mt-8 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Investment Outcome</h3>
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-green-500 font-semibold">Profit/Loss</p>
+                    <p id="profitLoss" class="text-2xl font-semibold">+$0.00 (0.00%)</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Total Investment</p>
+                    <p id="totalInvestment" class="text-xl">$0.00</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Total Take-Home</p>
+                    <p id="totalTakeHome" class="text-xl">$0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

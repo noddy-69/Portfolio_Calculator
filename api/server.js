@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const serverless = require('serverless-http');
 const app = express();
+
 const port = 3000;
 
 app.use(cors());
@@ -30,6 +32,5 @@ app.post('/calculate', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = app;
+module.exports.handler = serverless(app);

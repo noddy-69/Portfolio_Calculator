@@ -1,0 +1,12 @@
+node_modules/
+
+.env
+
+*.log
+
+/dist/
+/build/
+
+/# Ignore system files
+.DS_Store    # macOS system files
+Thumbs.db    # Windows thumbnail cache files
